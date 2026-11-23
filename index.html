@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Votação Formatura TO</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+<style>
+/* Layout: uma coluna central estreita, uma etapa por vez, faixa verde no topo como a beca */
+:root{
+  --bg:#f3f6f4; --surface:#ffffff; --ink:#132a22; --muted:#5b6f67; --line:#d7e2dc;
+  --green:#1f6b4f; --green-deep:#0f3b2c; --mint:#e3f1ea; --gold:#b8913f; --on-green:#f2f8f5;
+  --danger:#b3261e; --warn-bg:#fff4c2; --warn-ink:#5c4300; --warn-line:#f0d36b; --neon:#ff2d3d; --danger-bg:#fff0f1; --danger-ink:#7a0d16; --frame:#0f1a16; --bgop:.09;
+  --display:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1713; --surface:#13221c; --ink:#e6efe9; --muted:#9db1a8; --line:#24392f;
+  --green:#3fa37c; --green-deep:#0a2a1f; --mint:#163327; --gold:#d6b36a; --on-green:#eaf5ef; --danger:#f2867e; --warn-bg:#3a3010; --warn-ink:#ffe08a; --warn-line:#6b5a1c; --neon:#ff3b4a; --danger-bg:#2e0c10; --danger-ink:#ffc9cd; --frame:#08110d; --bgop:.13;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1713; --surface:#13221c; --ink:#e6efe9; --muted:#9db1a8; --line:#24392f;
+  --green:#3fa37c; --green-deep:#0a2a1f; --mint:#163327; --gold:#d6b36a; --on-green:#eaf5ef; --danger:#f2867e; --warn-bg:#3a3010; --warn-ink:#ffe08a; --warn-line:#6b5a1c; --neon:#ff3b4a; --danger-bg:#2e0c10; --danger-ink:#ffc9cd; --frame:#08110d; --bgop:.13;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Faixa superior */
+.band{background:var(--green-deep);color:var(--on-green);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.band .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
+.brand{font-family:var(--display);font-size:1.35rem;letter-spacing:.01em}
+.brand i{color:var(--gold)}
+.stepcount{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;opacity:.8;font-variant-numeric:tabular-nums}
+.bar{height:4px;background:rgba(255,255,255,.12)}
+.bar span{display:block;height:100%;width:0;background:var(--gold);transition:width .35s ease}
+
+main{padding-block:28px 64px;position:relative;z-index:1}
+.bgphoto{position:fixed;inset:0;z-index:0;pointer-events:none;background:url(img/fundo-ufpr.jpg) center 30%/cover no-repeat;opacity:var(--bgop);filter:grayscale(.35);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 45%,transparent 95%);mask-image:linear-gradient(to bottom,#000 0%,#000 45%,transparent 95%)}
+body:not(.intro) .bgphoto{display:none}
+.band{position:relative;z-index:2}
+.step{display:flex;flex-direction:column;gap:20px;animation:in .3s ease}
+@keyframes in{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.step{animation:none}.bar span{transition:none}}
+
+.eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+h1,h2{font-family:var(--display);font-weight:400;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.4rem,7vw,3.6rem)}
+h1 em,h2 em{color:var(--green);font-style:italic}
+h2{font-size:clamp(1.9rem,5vw,2.5rem)}
+p{margin:0;max-width:62ch}
+.lead{font-size:1.08rem;color:var(--muted)}
+
+.notice{display:flex;gap:14px;align-items:flex-start;background:var(--mint);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.notice svg{flex:none;margin-top:2px;color:var(--green)}
+.notice strong{display:block}
+
+.fixed{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;border-top:1px solid var(--line);padding-top:18px}
+.fixed img{border-radius:10px;aspect-ratio:16/10;object-fit:cover;width:100%}
+.fixed small{color:var(--muted);display:block}
+@media (max-width:480px){.fixed{grid-template-columns:1fr}}
+
+/* Campos */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:600}
+.field textarea{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;width:100%;resize:vertical}
+.field textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 22%,transparent)}
+.field label{font-weight:600}
+.field input{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;width:100%}
+.field input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 22%,transparent)}
+.field .err{color:var(--danger);font-size:.88rem;min-height:1.2em}
+.field input[aria-invalid="true"]{border-color:var(--danger)}
+
+/* Opções */
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.options.single{grid-template-columns:1fr}
+@media (max-width:560px){.options{grid-template-columns:1fr}}
+.opt{position:relative;display:grid;grid-template-rows:subgrid;grid-row:span 3;row-gap:0;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.opt:hover{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt:has(input:focus-visible){box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 35%,transparent)}
+.opt:has(input:checked){border-color:var(--green);box-shadow:0 0 0 1.5px var(--green)}
+.opt .ph{aspect-ratio:4/3;width:100%;background:var(--frame);display:grid;place-items:center;color:var(--on-green);font-size:.85rem;opacity:.9;text-align:center;padding:12px}
+.opt .ph span{opacity:.75}
+.opt img{aspect-ratio:4/3;width:100%;object-fit:contain;display:block;background:var(--frame)}
+.opt .txt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px}
+.opt .num{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:.85rem;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.opt:has(input:checked) .num{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.opt .label{font-weight:600;line-height:1.35}
+.opt .label small{display:block;font-weight:400;color:var(--muted)}
+.opt.textonly .txt{padding:18px}
+.opt .media{position:relative;display:flex;align-items:center;background:var(--frame);grid-row:2}
+.opt .ph{grid-row:2;height:100%;aspect-ratio:auto;min-height:200px}
+.opt .slot{grid-row:1}
+.opt .txt{grid-row:3}
+.opt:not(:has(.alert)) .slot{display:none}
+.opt:not(:has(.alert)) .media,.opt:not(:has(.alert)) .ph{grid-row:1 / span 2}
+.zoom{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.55);color:#fff;border:0;border-radius:8px;padding:6px 9px;font:600 .75rem var(--body);cursor:zoom-in}
+.opt .slot{display:block;padding:0}
+.opt .slot:not(:empty){padding:12px 12px 0}
+.opt .alert{display:flex;gap:9px;align-items:flex-start;background:var(--warn-bg);color:var(--warn-ink);border:1.5px solid var(--warn-line);border-radius:10px;padding:10px 12px;font-size:.84rem;line-height:1.4;height:100%}
+.opt .alert.danger{background:var(--danger-bg);color:var(--danger-ink);border:2px solid var(--neon);box-shadow:0 0 6px var(--neon),0 0 16px color-mix(in srgb,var(--neon) 55%,transparent),inset 0 0 8px color-mix(in srgb,var(--neon) 35%,transparent);animation:neon 2.4s ease-in-out infinite}
+@keyframes neon{50%{box-shadow:0 0 3px var(--neon),0 0 9px color-mix(in srgb,var(--neon) 40%,transparent),inset 0 0 4px color-mix(in srgb,var(--neon) 25%,transparent)}}
+@media (prefers-reduced-motion:reduce){.opt .alert.danger{animation:none}}
+.opt .txt{align-self:start}
+.opt .alert svg{flex:none;margin-top:1px}
+.qerr{color:var(--danger);font-size:.92rem;min-height:1.3em}
+
+/* Botões */
+.nav{display:flex;gap:12px;justify-content:space-between;align-items:center;padding-top:6px}
+.btn{font:600 1rem var(--body);border-radius:999px;padding:13px 26px;border:1.5px solid transparent;cursor:pointer}
+.btn:focus-visible{outline:3px solid color-mix(in srgb,var(--green) 40%,transparent);outline-offset:2px}
+.btn.primary{background:var(--green);color:var(--on-green)}
+.btn.primary:hover{background:var(--green-deep)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.nav .spacer{flex:1}
+.btn.small{padding:9px 18px;font-size:.92rem;display:inline-block}
+.upload{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:4px}
+.upinfo{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:.88rem;min-width:0}
+.upinfo img{width:56px;height:42px;object-fit:cover;border-radius:6px}
+.upinfo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:16ch}
+.linkbtn{background:none;border:0;color:var(--danger);font:600 .88rem var(--body);cursor:pointer;padding:4px}
+
+/* Revisão */
+.review{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.review .row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:14px 18px;border-top:1px solid var(--line)}
+.review .row:first-child{border-top:0}
+.review dt{color:var(--muted);font-size:.85rem;grid-column:1}
+.review dd{margin:0;font-weight:600;grid-column:1}
+.review button{grid-column:2;grid-row:1/span 2;align-self:center;background:none;border:0;color:var(--green);font:600 .9rem var(--body);cursor:pointer;padding:6px}
+.review dd.missing{color:var(--danger)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}
+.check input{width:20px;height:20px;accent-color:var(--green);margin-top:2px;flex:none}
+
+.done{text-align:left}
+.seal{width:64px;height:64px;border-radius:50%;background:var(--green);color:var(--on-green);display:grid;place-items:center}
+.demo{font-size:.88rem;color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:10px 14px}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;background:rgba(5,15,11,.88);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px;z-index:20}
+.lb img{max-height:86vh;border-radius:10px}
+.lb button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px));background:#fff;color:#111;border:0;border-radius:999px;padding:8px 14px;font:600 .9rem var(--body);cursor:pointer}
+</style>
+</head>
+<body>
+
+<header class="band">
+  <div class="wrap">
+    <div class="brand">Formatura <i>Terapia Ocupacional</i></div>
+    <div class="stepcount" id="stepcount"></div>
+  </div>
+  <div class="bar"><span id="bar"></span></div>
+</header>
+
+<div class="bgphoto" aria-hidden="true"></div>
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<div class="lb" id="lb" hidden><img id="lbimg" alt=""><button type="button" id="lbclose">Fechar</button></div>
+
+<script>
+/* ================= CONFIGURAÇÃO =================
+   Cole abaixo o link do Apps Script (termina em /exec).
+   Enquanto estiver vazio, o site funciona em modo de prévia e não grava nada. */
+const SCRIPT_URL = "";
+
+/* Perguntas. Para mudar textos, opções ou fotos, edite só esta lista. */
+const QUESTIONS = [
+  { id:"painel_fotos", eyebrow:"Decoração", title:"Painel de fotos",
+    help:"Escolha o fundo do painel onde serão feitas as fotos com familiares e convidados.",
+    options:[
+      {label:"Fundo somente com cortinado preto"},
+      {label:"Fundo preto com LED", img:"img/painel-led.jpg",
+       alert:"De acordo com a equipe responsável pelo Teatro da Reitoria, o espaço possui uma rede elétrica antiga, portanto não é indicada a utilização de luzes de LED devido ao aumento do risco de incêndio. Fica a critério da turma.", alertLevel:"danger"},
+      {label:"Fundo preto com lateral na cor do curso", img:"img/painel-lateral-cor.jpg"},
+      {label:"Fundo na parede do teatro", note:"Sugestão do César", img:"img/painel-parede-teatro.jpg",
+       alert:"Este é o espaço de entrada. Não é recomendada a utilização de tapetes nesta região, pois, em caso de incêndio, fica mais perigosa a saída para as pessoas. Fica a critério da turma."},
+      {label:"Sugestão Myllena", img:"img/painel-sugestao-myllena.jpg"}
+    ],
+    extra:{id:"painel_sugestao", title:"Sugestão para o painel de fotos", photo:true,
+      label:"Tem outra ideia para o painel de fotos? Descreva abaixo ou envie uma foto de referência (opcional).",
+      placeholder:"Ex.: fundo verde-claro com arranjos de flores nas laterais"}},
+  { id:"nome_curso", eyebrow:"Decoração", title:"Nome do curso",
+    help:"Como o nome Terapia Ocupacional deve aparecer no palco.",
+    options:[
+      {label:"Letras em MDF em frente à mesa diretiva", img:"img/nome-mdf-frente-mesa.jpg"},
+      {label:"Na mesa, letras desenhadas", img:"img/nome-letras-desenhadas.jpg"}
+    ]},
+  { id:"cortinado_led", eyebrow:"Palco", title:"Cortinado de LED",
+    help:"Onde as cortinas de luz devem ficar no fundo do palco.",
+    options:[
+      {label:"Em toda a extensão do palco", img:"img/cortinado-led-toda-extensao.jpg"},
+      {label:"Nas laterais, deixando o símbolo sem LED atrás"}
+    ]},
+  { id:"laterais_verdes", eyebrow:"Palco", title:"Laterais verdes no cortinado do palco?",
+    help:"Ainda não há fotos desta opção. A empresa fará as fotos em fevereiro.",
+    textOnly:true,
+    options:[ {label:"Sim, queremos laterais verdes"}, {label:"Não, sem laterais verdes"} ]},
+  { id:"mesa_diretiva", eyebrow:"Palco", title:"Mesa diretiva",
+    help:"Decoração da mesa onde ficam os professores e a direção.",
+    options:[
+      {label:"Com samambaias", img:"img/mesa-com-samambaias.jpg"},
+      {label:"Sem samambaias", img:"img/mesa-sem-samambaias.jpg"}
+    ],
+    extra:{id:"mesa_outras_flores", title:"Outras flores na mesa diretiva",
+      label:"Estamos verificando se as samambaias são artificiais (será informado no grupo). Caso queira outras flores, escreva abaixo:",
+      placeholder:"Ex.: arranjos de flores brancas e verdes (opcional)"}}
+];
+/* ================================================ */
+
+const app = document.getElementById("app");
+const state = { photos:{}, step:0, nome:"", telefone:"", answers:{}, sending:false, sent:false, demo:false, returnToReview:false };
+const TOTAL = QUESTIONS.length + 3; // início, dados, perguntas, revisão
+
+function shrink(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const im=new Image();
+  im.onload=()=>{const m=1400,k=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement("canvas");
+    c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+    URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",0.8))};im.onerror=rej;im.src=u})}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function formatPhone(v){
+  const d=v.replace(/\D/g,"").slice(0,11);
+  if(d.length<=2) return d.length?"("+d:"";
+  if(d.length<=6) return "("+d.slice(0,2)+") "+d.slice(2);
+  if(d.length<=10) return "("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6);
+  return "("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7);
+}
+
+function header(){
+  const s=state.step;
+  document.getElementById("bar").style.width = (state.sent?100:Math.round(s/(TOTAL-1)*100))+"%";
+  document.getElementById("stepcount").textContent =
+    state.sent ? "Concluído" : s===0 ? "≈ 5 min" : s<=QUESTIONS.length+1 ? `Etapa ${s} de ${TOTAL-2}` : "Revisão";
+}
+
+function render(){
+  header();
+  document.body.classList.toggle("intro", state.step===0 && !state.sent);
+  if(state.sent) return renderDone();
+  const s=state.step;
+  if(s===0) return renderIntro();
+  if(s===1) return renderDados();
+  if(s<=QUESTIONS.length+1) return renderQuestion(QUESTIONS[s-2]);
+  return renderReview();
+}
+function go(n){ state.step=n; render(); window.scrollTo({top:0,behavior:"smooth"}); const h=app.querySelector("h1,h2"); if(h){h.tabIndex=-1;h.focus({preventScroll:true});} }
+
+function navHTML(nextLabel){
+  return `<div class="nav">
+    ${state.step>0?`<button type="button" class="btn ghost" id="back">Voltar</button>`:""}
+    <span class="spacer"></span>
+    <button type="submit" class="btn primary" id="next">${nextLabel}</button></div>`;
+}
+function nextAfterAnswer(){ if(state.returnToReview){state.returnToReview=false; go(TOTAL-1);} else go(state.step+1); }
+
+function renderIntro(){
+  app.innerHTML = `<form class="step" id="f">
+    <span class="eyebrow">Votação da comissão de formatura</span>
+    <h1>Vamos decidir juntos a <em>decoração</em> da nossa formatura</h1>
+    <p class="lead">Esta é a votação da turma de Terapia Ocupacional sobre as opções de decoração da cerimônia. Cada etapa mostra uma decisão, com fotos de referência sempre que houver.</p>
+    <div class="notice" role="note">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <div><strong>Leva no máximo 5 minutos.</strong>Preencha com atenção: olhe as fotos de cada opção antes de escolher. No final você confere todas as respostas antes de enviar.</div>
+    </div>
+    <div class="fixed">
+      <img src="img/simbolo-mdf-branco.jpg" alt="Símbolo do curso em MDF branco ao fundo do palco">
+      <div><span class="eyebrow">Já definido em contrato</span><p><strong>Símbolo do curso em MDF branco.</strong></p><small>Este item não entra na votação.</small></div>
+    </div>
+    ${navHTML("Começar")}
+  </form>`;
+  bindForm(()=>go(1));
+}
+
+function renderDados(){
+  app.innerHTML = `<form class="step" id="f" novalidate>
+    <span class="eyebrow">Identificação</span>
+    <h2>Seus <em>dados</em></h2>
+    <p class="lead">Usamos para saber quem já votou e para contato da comissão, se precisar.</p>
+    <div class="field"><label for="nome">Nome completo</label>
+      <input id="nome" name="nome" autocomplete="name" value="${esc(state.nome)}" placeholder="Ex.: Maria Fernanda Souza">
+      <span class="err" id="nome-err"></span></div>
+    <div class="field"><label for="telefone">Telefone (WhatsApp)</label>
+      <input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" value="${esc(state.telefone)}" placeholder="(41) 99999-9999">
+      <span class="err" id="tel-err"></span></div>
+    ${navHTML("Continuar")}
+  </form>`;
+  const tel=document.getElementById("telefone");
+  tel.addEventListener("input",()=>{tel.value=formatPhone(tel.value)});
+  bindForm(()=>{
+    const nome=document.getElementById("nome"), n=nome.value.trim().replace(/\s+/g," ");
+    const d=tel.value.replace(/\D/g,"");
+    let ok=true;
+    const nOk = n.split(" ").length>=2 && n.length>=5;
+    nome.setAttribute("aria-invalid",!nOk); document.getElementById("nome-err").textContent = nOk?"":"Escreva seu nome e sobrenome.";
+    const tOk = d.length===10||d.length===11;
+    tel.setAttribute("aria-invalid",!tOk); document.getElementById("tel-err").textContent = tOk?"":"Informe o telefone com DDD, por exemplo (41) 99999-9999.";
+    ok = nOk&&tOk;
+    if(!ok){ (nOk?tel:nome).focus(); return; }
+    state.nome=n; state.telefone=tel.value;
+    if(state.returnToReview){state.returnToReview=false; go(TOTAL-1);} else go(2);
+  });
+}
+
+function renderQuestion(q){
+  const cur = state.answers[q.id];
+  const opts = q.options.map((o,i)=>{
+    const media = q.textOnly ? "" : o.img
+      ? `<span class="media"><img src="${o.img}" alt="Foto de referência: ${esc(o.label)}" loading="lazy"><button type="button" class="zoom" data-img="${o.img}" aria-label="Ampliar foto: ${esc(o.label)}">Ampliar</button></span>`
+      : `<div class="ph"><span>Sem foto de referência</span></div>`;
+    const alert = o.alert ? `<span class="alert${o.alertLevel==="danger"?" danger":""}" role="note"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><span><strong>Atenção:</strong> ${esc(o.alert)}</span></span>` : "";
+    return `<label class="opt${q.textOnly?" textonly":""}">
+      <span class="slot">${alert}</span>
+      <input type="radio" name="${q.id}" id="${q.id}-${i}" value="${esc(o.label)}" ${cur===o.label?"checked":""}>
+      ${media}
+      <span class="txt"><span class="num">${i+1}</span><span class="label">${esc(o.label)}${o.note?`<small>${esc(o.note)}</small>`:""}</span></span>
+    </label>`;
+  }).join("");
+  app.innerHTML = `<form class="step" id="f">
+    <span class="eyebrow">${esc(q.eyebrow)}</span>
+    <h2>${esc(q.title)}</h2>
+    <p class="lead">${esc(q.help)}</p>
+    <fieldset style="border:0;padding:0;margin:0"><legend class="sr" style="position:absolute;left:-9999px">${esc(q.title)}</legend>
+      <div class="options${q.options.length===1?" single":""}">${opts}</div></fieldset>
+    ${q.extra?`<div class="field"><label for="${q.extra.id}">${esc(q.extra.label)}</label>
+      <textarea id="${q.extra.id}" rows="3" maxlength="500" placeholder="${esc(q.extra.placeholder||"")}">${esc(state.answers[q.extra.id]||"")}</textarea>
+      ${q.extra.photo?`<div class="upload">
+        <input type="file" id="${q.extra.id}_foto" accept="image/*" hidden>
+        <label for="${q.extra.id}_foto" class="btn ghost small">${state.photos[q.extra.id]?"Trocar foto":"Anexar foto"}</label>
+        <span class="upinfo" id="${q.extra.id}_info">${state.photos[q.extra.id]?`<img src="${state.photos[q.extra.id].data}" alt="Foto anexada"> <span>${esc(state.photos[q.extra.id].name)}</span> <button type="button" class="linkbtn" id="${q.extra.id}_rm">Remover</button>`:"JPG ou PNG, até 10 MB"}</span>
+      </div>`:""}</div>`:""}
+    <div class="qerr" id="qerr"></div>
+    ${navHTML(state.returnToReview?"Salvar e voltar à revisão":"Continuar")}
+  </form>`;
+  app.querySelectorAll(".zoom").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();openLB(b.dataset.img,b.getAttribute("aria-label"))}));
+  app.querySelectorAll(`input[name="${q.id}"]`).forEach(r=>r.addEventListener("change",()=>{state.answers[q.id]=r.value;document.getElementById("qerr").textContent=""}));
+  if(q.extra){const t=document.getElementById(q.extra.id);t.addEventListener("input",()=>{state.answers[q.extra.id]=t.value.trim()})
+    if(q.extra.photo){
+      const f=document.getElementById(q.extra.id+"_foto");
+      f.addEventListener("change",async()=>{
+        const file=f.files[0]; if(!file) return;
+        const err=document.getElementById("qerr");
+        if(!file.type.startsWith("image/")){err.textContent="Envie um arquivo de imagem (JPG ou PNG).";return}
+        if(file.size>10*1024*1024){err.textContent="A foto passa de 10 MB. Escolha uma menor.";return}
+        try{ state.photos[q.extra.id]={name:file.name,data:await shrink(file)}; err.textContent=""; render(); }
+        catch(e){ err.textContent="Não foi possível ler essa foto. Tente outra."; }
+      });
+      const rm=document.getElementById(q.extra.id+"_rm");
+      if(rm) rm.addEventListener("click",()=>{delete state.photos[q.extra.id];render()});
+    }}
+  bindForm(()=>{
+    if(!state.answers[q.id]){document.getElementById("qerr").textContent="Escolha uma das opções para continuar.";return}
+    nextAfterAnswer();
+  });
+}
+
+function renderReview(){
+  const rows = [
+    {k:"Nome",v:state.nome,step:1},{k:"Telefone",v:state.telefone,step:1},
+    ...QUESTIONS.flatMap((q,i)=>[{k:q.title,v:state.answers[q.id],step:i+2},
+      ...(q.extra?[{k:q.extra.title,v:state.answers[q.extra.id],step:i+2,optional:true}]:[]),
+      ...(q.extra&&q.extra.photo?[{k:"Foto de sugestão",v:state.photos[q.extra.id]?"Anexada: "+state.photos[q.extra.id].name:"",step:i+2,optional:true}]:[])])
+  ].map(r=>`<div class="row"><dt>${esc(r.k)}</dt><dd class="${r.v||r.optional?"":"missing"}" style="${!r.v&&r.optional?"font-weight:400;color:var(--muted)":""}">${r.v?esc(r.v):r.optional?"Não preenchido (opcional)":"Sem resposta"}</dd><button type="button" data-step="${r.step}">Alterar</button></div>`).join("");
+  app.innerHTML = `<form class="step" id="f">
+    <span class="eyebrow">Última etapa</span>
+    <h2>Confira suas <em>respostas</em></h2>
+    <p class="lead">Veja se está tudo certo. Toque em “Alterar” para mudar qualquer resposta antes de enviar.</p>
+    <dl class="review" style="margin:0">${rows}</dl>
+    <label class="check"><input type="checkbox" id="confirm"> Conferi minhas respostas e quero enviar meu voto.</label>
+    <div class="qerr" id="qerr"></div>
+    ${navHTML("Enviar voto")}
+  </form>`;
+  app.querySelectorAll(".review button").forEach(b=>b.addEventListener("click",()=>{state.returnToReview=true;go(+b.dataset.step)}));
+  bindForm(submit);
+}
+
+async function submit(){
+  const err=document.getElementById("qerr");
+  const missing = !state.nome || QUESTIONS.some(q=>!state.answers[q.id]);
+  if(missing){err.textContent="Há perguntas sem resposta. Use “Alterar” para completar.";return}
+  if(!document.getElementById("confirm").checked){err.textContent="Marque a confirmação acima para enviar.";return}
+  const btn=document.getElementById("next"); btn.disabled=true; btn.textContent="Enviando…";
+  const payload={nome:state.nome,telefone:state.telefone,...state.answers};
+  for(const [k,ph] of Object.entries(state.photos)) payload[k+"_foto"]={nome:ph.name,tipo:"image/jpeg",base64:ph.data.split(",")[1]};
+  try{
+    if(!SCRIPT_URL){ state.demo=true; await new Promise(r=>setTimeout(r,600)); }
+    else{
+      await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+    }
+    state.sent=true; render(); window.scrollTo({top:0});
+  }catch(e){
+    btn.disabled=false; btn.textContent="Tentar enviar de novo";
+    err.textContent="Não foi possível enviar. Confira sua internet e tente de novo.";
+  }
+}
+
+function renderDone(){
+  const first=state.nome.split(" ")[0];
+  app.innerHTML = `<section class="step done">
+    <div class="seal" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h1>Voto enviado, <em>${esc(first)}</em>!</h1>
+    <p class="lead">Obrigado por participar. A comissão vai somar os votos e divulgar o resultado para a turma.</p>
+    ${state.demo?`<p class="demo">Modo de prévia: este envio não foi gravado em nenhuma planilha.</p>`:""}
+  </section>`;
+}
+
+function bindForm(onNext){
+  const f=document.getElementById("f");
+  f.addEventListener("submit",e=>{e.preventDefault();onNext()});
+  const back=document.getElementById("back");
+  if(back) back.addEventListener("click",()=>{state.returnToReview=false;go(state.step-1)});
+}
+
+const lb=document.getElementById("lb"), lbimg=document.getElementById("lbimg");
+function openLB(src,alt){lbimg.src=src;lbimg.alt=alt||"";lb.hidden=false;document.getElementById("lbclose").focus()}
+function closeLB(){lb.hidden=true}
+lb.addEventListener("click",e=>{if(e.target!==lbimg)closeLB()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLB()});
+
+render();
+</script>
+</body>
+</html>
